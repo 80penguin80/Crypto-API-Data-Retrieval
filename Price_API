@@ -1,0 +1,28 @@
+#packages and API connection
+!pip install pycoingecko
+!pip install plotly
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+from plotly.offline import plot
+import matplotlib.pyplot as plt
+import datetime
+from pycoingecko import CoinGeckoAPI
+cg=CoinGeckoAPI()
+
+#auto plotter for any coin
+    
+def coin_plot(name, days):
+    coin=cg.get_coin_market_chart_by_id(id=name, vs_currency='usd', days=days)
+    coin_price=coin['prices']
+    coin_data= pd.DataFrame(coin_price, columns=['TimeStamp', 'Price'])
+    coin_data['Date']=pd.to_datetime(coin_data['TimeStamp'], unit='ms')
+    coin_date=coin_data['Date']
+    coin_pricing=coin_data['Price']
+    btc_plot = plt.plot(coin_date,coin_pricing, color='red')
+    plt.xlabel('Days')
+    plt.ylabel('Price')
+    #plt.title(coin_name.upper() + ' Price')
+
+coin_plot('bitcoin', 100)
+coin_plot('dogecoin', 100)
